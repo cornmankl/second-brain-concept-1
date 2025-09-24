@@ -1,0 +1,345 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  inboxItems      InboxItem[]
+  tasks           Task[]
+  ideas           Idea[]
+  knowledgeItems  KnowledgeItem[]
+  srsCards        SRSCard[]
+  areas           Area[]
+  reviews         Review[]
+}
+
+// 1. 📥 Inbox Database
+model InboxItem {
+  id          String   @id @default(cuid())
+  title       String
+  type        InboxType
+  priority    Priority
+  processed   Boolean  @default(false)
+  quickNote   String?
+  tags        String? // JSON array of tags
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// 2. 🎯 Tasks & Projects Database
+model Task {
+  id             String        @id @default(cuid())
+  name           String
+  status         TaskStatus    @default(NOT_STARTED)
+  type           TaskType      @default(TASK)
+  priority       TaskPriority  @default(P3_MEDIUM)
+  dueDate        DateTime?
+  energyRequired EnergyLevel
+  context        String?       // JSON array of contexts
+  timeEstimate   Int?          // in minutes
+  actualTime     Int?          // in minutes
+  nextAction     String?
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relations
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId      String?
+  project        Task?         @relation("TaskProject", fields: [projectId], references: [id])
+  subtasks       Task[]        @relation("TaskProject")
+  areas          Area[]        @relation("AreaTasks")
+  relatedIdeas   Idea[]        @relation("IdeaTasks")
+  knowledgeItems KnowledgeItem[] @relation("TaskKnowledge")
+}
+
+// 3. 💡 Ideas Garden Database
+model Idea {
+  id               String        @id @default(cuid())
+  title            String
+  stage            IdeaStage     @default(SEED)
+  category         IdeaCategory
+  potentialImpact  ImpactLevel
+  effortRequired   EffortLevel
+  nextExperiment   String?
+  successMetrics   String?
+  notes            String?
+  lastReviewed     DateTime?
+  reviewCount      Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  // Relations
+  userId           String
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectedToId    String?
+  connectedTo      Idea?         @relation("IdeaRelations", fields: [connectedToId], references: [id])
+  relatedIdeas     Idea[]        @relation("IdeaRelations")
+  resources        KnowledgeItem[] @relation("IdeaResources")
+  tasks            Task[]        @relation("IdeaTasks")
+}
+
+// 4. 📚 Knowledge Base Database
+model KnowledgeItem {
+  id               String           @id @default(cuid())
+  title            String
+  type             KnowledgeType
+  status           ProcessingStatus @default(TO_PROCESS)
+  sourceUrl        String?
+  authorCreator    String?
+  dateConsumed     DateTime?
+  keyConcepts      String?          // JSON array
+  permanentNotes   String?
+  originalNotes    String?
+  quality          QualityLevel     @default(GOOD)
+  tags             String?          // JSON array
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  // Relations
+  userId           String
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectedToId    String?
+  connectedTo      KnowledgeItem?   @relation("KnowledgeConnections", fields: [connectedToId], references: [id])
+  connections      KnowledgeItem[]  @relation("KnowledgeConnections")
+  tasks            Task[]           @relation("TaskKnowledge")
+  srsCards         SRSCard[]        @relation("CardKnowledge")
+  ideas            Idea[]           @relation("IdeaResources")
+  areas            Area[]           @relation("AreaResources")
+}
+
+// 5. 🔄 Spaced Repetition System Database
+model SRSCard {
+  id                String           @id @default(cuid())
+  question          String
+  answer            String
+  type              CardType
+  difficulty        DifficultyLevel  @default(MEDIUM)
+  nextReviewDate    DateTime
+  interval          Int              @default(1) // days
+  repetitionCount   Int              @default(0)
+  lastPerformance   PerformanceLevel?
+  understandingLevel UnderstandingLevel @default(SURFACE)
+  contextExamples   String?
+  whyMatters        String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // Relations
+  userId            String
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceId          String?
+  source            KnowledgeItem?   @relation("CardKnowledge", fields: [sourceId], references: [id])
+  connectedToId     String?
+  connectedTo       SRSCard?         @relation("CardRelations", fields: [connectedToId], references: [id])
+  relatedCards      SRSCard[]        @relation("CardRelations")
+}
+
+// 6. 🎓 Areas Database
+model Area {
+  id              String        @id @default(cuid())
+  areaName        String
+  type            AreaType
+  visionStatement String?
+  currentFocus    String?
+  quarterlyGoals  String?
+  keyMetrics      String?
+  lastReview      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeProjects  Task[]        @relation("AreaTasks")
+  resources       KnowledgeItem[] @relation("AreaResources")
+}
+
+// 7. 📊 Reviews Database
+model Review {
+  id                 String           @id @default(cuid())
+  reviewDate         DateTime         @unique
+  type               ReviewType
+  wins               String?
+  challenges         String?
+  lessonsLearned     String?
+  energyLevel        EnergyLevel
+  productivityScore  Int              // 1-10
+  keyDecisions       String?
+  nextPeriodFocus    String?
+  habitsTracking     String?          // JSON array
+  gratitude          String?
+  systemImprovements String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  // Relations
+  userId             String
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Enums for all databases
+
+enum InboxType {
+  TASK
+  IDEA
+  NOTE
+  QUESTION
+  RESOURCE
+}
+
+enum Priority {
+  URGENT
+  HIGH
+  NORMAL
+  LOW
+}
+
+enum TaskStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  BLOCKED
+  COMPLETE
+  CANCELLED
+}
+
+enum TaskType {
+  TASK
+  PROJECT
+  MILESTONE
+}
+
+enum TaskPriority {
+  P1_CRITICAL
+  P2_HIGH
+  P3_MEDIUM
+  P4_LOW
+}
+
+enum EnergyLevel {
+  HIGH_FOCUS
+  MEDIUM
+  LOW
+}
+
+enum IdeaStage {
+  SEED
+  SPROUTING
+  GROWING
+  HARVEST
+  DORMANT
+  PRUNED
+}
+
+enum IdeaCategory {
+  BUSINESS
+  CREATIVE
+  TECHNICAL
+  PERSONAL
+  RESEARCH
+}
+
+enum ImpactLevel {
+  TEN_X
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum EffortLevel {
+  MASSIVE
+  LARGE
+  MEDIUM
+  SMALL
+}
+
+enum KnowledgeType {
+  ARTICLE
+  BOOK
+  VIDEO
+  COURSE
+  PODCAST
+  PAPER
+  PERSONAL_NOTE
+}
+
+enum ProcessingStatus {
+  TO_PROCESS
+  PROCESSING
+  PROCESSED
+  REFERENCE
+}
+
+enum QualityLevel {
+  EVERGREEN
+  GOOD
+  OKAY
+  POOR
+}
+
+enum CardType {
+  FACT
+  CONCEPT
+  PROCESS
+  CONNECTION
+  PROBLEM
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
+}
+
+enum PerformanceLevel {
+  PERFECT
+  GOOD
+  HARD
+  AGAIN
+}
+
+enum UnderstandingLevel {
+  SURFACE
+  WORKING
+  DEEP
+  TEACHING
+}
+
+enum AreaType {
+  PROFESSIONAL
+  PERSONAL
+  HEALTH
+  RELATIONSHIPS
+  FINANCIAL
+  LEARNING
+  CREATIVE
+}
+
+enum ReviewType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
