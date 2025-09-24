@@ -5,13 +5,13 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // 禁用 Next.js 热重载，由 nodemon 处理重编译
-  reactStrictMode: false,
+  // Enable React Strict Mode for better development experience
+  reactStrictMode: true,
   webpack: (config, { dev }) => {
     if (dev) {
-      // 禁用 webpack 的热模块替换
+      // Only ignore specific files that might cause issues with nodemon
       config.watchOptions = {
-        ignored: ['**/*'], // 忽略所有文件变化
+        ignored: ['node_modules/**', '.next/**', 'dev.log', 'server.log'],
       };
     }
     return config;
@@ -20,6 +20,8 @@ const nextConfig: NextConfig = {
     // 构建时忽略ESLint错误
     ignoreDuringBuilds: true,
   },
+  // Ensure static files are served correctly
+  output: 'standalone',
 };
 
 export default nextConfig;

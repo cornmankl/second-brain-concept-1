@@ -3,6 +3,7 @@ import { setupSocket } from '@/lib/socket';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import next from 'next';
+import { join } from 'path';
 
 const dev = process.env.NODE_ENV !== 'production';
 const currentPort = 3000;
@@ -28,6 +29,36 @@ async function createCustomServer() {
       if (req.url?.startsWith('/api/socketio')) {
         return;
       }
+      
+      // Handle static files directly in production
+      if (!dev && req.url?.startsWith('/_next/static')) {
+        const staticPath = join(process.cwd(), '.next', 'static');
+        const filePath = join(staticPath, req.url.replace('/_next/static', ''));
+        
+        // Import fs only when needed
+        const fs = require('fs');
+        if (fs.existsSync(filePath)) {
+          const ext = filePath.split('.').pop();
+          const contentType = {
+            'js': 'application/javascript',
+            'css': 'text/css',
+            'json': 'application/json',
+            'woff2': 'font/woff2',
+            'png': 'image/png',
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'gif': 'image/gif',
+            'svg': 'image/svg+xml',
+            'ico': 'image/x-icon'
+          }[ext || ''] || 'application/octet-stream';
+          
+          res.setHeader('Content-Type', contentType);
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          fs.createReadStream(filePath).pipe(res);
+          return;
+        }
+      }
+      
       handle(req, res);
     });
 
@@ -46,6 +77,11 @@ async function createCustomServer() {
     server.listen(currentPort, hostname, () => {
       console.log(`> Ready on http://${hostname}:${currentPort}`);
       console.log(`> Socket.IO server running at ws://${hostname}:${currentPort}/api/socketio`);
+      if (dev) {
+        console.log(`> Development mode with hot reload enabled`);
+      } else {
+        console.log(`> Production mode with static file serving`);
+      }
     });
 
   } catch (err) {
