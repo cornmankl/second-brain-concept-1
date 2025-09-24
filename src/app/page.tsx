@@ -22,6 +22,10 @@ import {
 import { cn } from "@/lib/utils"
 import { InboxView } from "@/components/inbox/inbox-view"
 import { TasksView } from "@/components/tasks/tasks-view"
+import { IdeasView } from "@/components/ideas/ideas-view"
+import { KnowledgeView } from "@/components/knowledge/knowledge-view"
+import { SpacedRepetitionView } from "@/components/spaced-repetition/spaced-repetition-view"
+import { LifeAreasView } from "@/components/life-areas/life-areas-view"
 
 const navigationItems = [
   {
@@ -42,35 +46,35 @@ const navigationItems = [
     title: "Ideas Garden",
     icon: Lightbulb,
     description: "Incubate and develop ideas",
-    count: 0,
+    count: 3,
     color: "bg-yellow-500"
   },
   {
     title: "Knowledge Base",
     icon: BookOpen,
     description: "Permanent learning repository",
-    count: 0,
+    count: 4,
     color: "bg-purple-500"
   },
   {
     title: "Spaced Repetition",
     icon: Brain,
     description: "Retain information effectively",
-    count: 0,
+    count: 4,
     color: "bg-red-500"
   },
   {
     title: "Life Areas",
     icon: Target,
     description: "Balanced growth areas",
-    count: 0,
+    count: 2,
     color: "bg-indigo-500"
   },
   {
     title: "Reviews",
     icon: BarChart3,
     description: "Reflection and optimization",
-    count: 0,
+    count: 3,
     color: "bg-pink-500"
   }
 ]
@@ -86,37 +90,13 @@ export default function Home() {
       case "tasks-projects":
         return <TasksView />
       case "ideas-garden":
-        return (
-          <div className="text-center py-12">
-            <Lightbulb className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Ideas Garden</h2>
-            <p className="text-muted-foreground">Coming soon - Idea incubation system with impact/effort matrix</p>
-          </div>
-        )
+        return <IdeasView />
       case "knowledge-base":
-        return (
-          <div className="text-center py-12">
-            <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Knowledge Base</h2>
-            <p className="text-muted-foreground">Coming soon - Permanent notes system with connections</p>
-          </div>
-        )
+        return <KnowledgeView />
       case "spaced-repetition":
-        return (
-          <div className="text-center py-12">
-            <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Spaced Repetition</h2>
-            <p className="text-muted-foreground">Coming soon - SRS with review scheduling</p>
-          </div>
-        )
+        return <SpacedRepetitionView />
       case "life-areas":
-        return (
-          <div className="text-center py-12">
-            <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Life Areas</h2>
-            <p className="text-muted-foreground">Coming soon - Life areas management and review system</p>
-          </div>
-        )
+        return <LifeAreasView />
       case "reviews":
         return (
           <div className="text-center py-12">
