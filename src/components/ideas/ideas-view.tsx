@@ -20,7 +20,7 @@ import {
   Clock,
   Target,
   Zap,
-  Seedling,
+  Sprout,
   TreePine,
   Calendar,
   Star,
@@ -99,7 +99,7 @@ const mockIdeas: Idea[] = [
 ]
 
 const statusConfig = {
-  seed: { icon: Seedling, color: "bg-green-500", label: "Seed", description: "New idea, needs exploration" },
+  seed: { icon: Sprout, color: "bg-green-500", label: "Seed", description: "New idea, needs exploration" },
   sprout: { icon: TreePine, color: "bg-blue-500", label: "Sprout", description: "Developing, gathering resources" },
   sapling: { icon: TrendingUp, color: "bg-purple-500", label: "Sapling", description: "Growing, making progress" },
   tree: { icon: Star, color: "bg-yellow-500", label: "Tree", description: "Mature, ready to harvest" },
@@ -263,7 +263,7 @@ export function IdeasView() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Ready to Grow</CardTitle>
-            <Seedling className="h-4 w-4 text-muted-foreground" />
+            <Sprout className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{getIdeasByStatus("seed").length}</div>

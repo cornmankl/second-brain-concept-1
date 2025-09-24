@@ -17,7 +17,9 @@ import {
   Search,
   Plus,
   Bell,
-  User
+  User,
+  Bot,
+  Sparkles
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { InboxView } from "@/components/inbox/inbox-view"
@@ -26,6 +28,8 @@ import { IdeasView } from "@/components/ideas/ideas-view"
 import { KnowledgeView } from "@/components/knowledge/knowledge-view"
 import { SpacedRepetitionView } from "@/components/spaced-repetition/spaced-repetition-view"
 import { LifeAreasView } from "@/components/life-areas/life-areas-view"
+import { AIAssistantView } from "@/components/ai-assistant/ai-assistant-view"
+import { FloatingAIButton } from "@/components/ai-assistant/floating-ai-button"
 
 const navigationItems = [
   {
@@ -76,6 +80,13 @@ const navigationItems = [
     description: "Reflection and optimization",
     count: 3,
     color: "bg-pink-500"
+  },
+  {
+    title: "AI Assistant",
+    icon: Bot,
+    description: "Intelligent knowledge companion",
+    count: 0,
+    color: "bg-gradient-to-r from-blue-500 to-purple-500"
   }
 ]
 
@@ -105,6 +116,8 @@ export default function Home() {
             <p className="text-muted-foreground">Coming soon - Reflection and optimization system</p>
           </div>
         )
+      case "ai-assistant":
+        return <AIAssistantView />
       default:
         return (
           <div className="max-w-7xl mx-auto space-y-6">
@@ -283,6 +296,7 @@ export default function Home() {
       case "spaced-repetition": return "Spaced Repetition"
       case "life-areas": return "Life Areas"
       case "reviews": return "Reviews"
+      case "ai-assistant": return "AI Assistant"
       default: return "Dashboard"
     }
   }
@@ -296,6 +310,7 @@ export default function Home() {
       case "spaced-repetition": return "Retain information effectively"
       case "life-areas": return "Balanced growth areas"
       case "reviews": return "Reflection and optimization"
+      case "ai-assistant": return "Intelligent knowledge companion"
       default: return "Your complete second brain system"
     }
   }
@@ -422,6 +437,9 @@ export default function Home() {
           onClick={() => setSidebarOpen(false)}
         />
       )}
+      
+      {/* Floating AI Assistant Button */}
+      <FloatingAIButton currentSection={activeView} />
     </div>
   )
 }
