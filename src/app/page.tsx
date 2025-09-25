@@ -36,7 +36,7 @@ import { LifeAreasView } from "@/components/life-areas/life-areas-view"
 import { AIAssistantView } from "@/components/ai-assistant/ai-assistant-view"
 import { FloatingAIButton } from "@/components/ai-assistant/floating-ai-button"
 import { WhatsAppStatusCard } from "@/components/whatsapp/whatsapp-status-card"
-import { WhatsAppConnectButton } from "@/components/whatsapp/whatsapp-connect-button-simple"
+import { WhatsAppConnectButton } from "@/components/whatsapp/whatsapp-connect-button"
 
 const navigationItems = [
   {

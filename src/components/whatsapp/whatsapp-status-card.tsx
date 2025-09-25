@@ -15,7 +15,7 @@ import {
   ExternalLink,
   QrCode
 } from "lucide-react"
-import { WhatsAppConnectButton } from "./whatsapp-connect-button-simple"
+import { WhatsAppConnectButton } from "./whatsapp-connect-button"
 import { cn } from "@/lib/utils"
 
 interface ConnectionStatus {
