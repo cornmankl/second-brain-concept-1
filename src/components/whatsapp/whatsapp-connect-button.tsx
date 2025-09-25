@@ -530,6 +530,7 @@ export function WhatsAppConnectButton({
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
     }
+    }
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
