@@ -19,7 +19,12 @@ import {
   Bell,
   User,
   Bot,
-  Sparkles
+  Sparkles,
+  MessageSquare,
+  Globe,
+  Smartphone,
+  CheckCircle,
+  QrCode
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { InboxView } from "@/components/inbox/inbox-view"
@@ -30,6 +35,7 @@ import { SpacedRepetitionView } from "@/components/spaced-repetition/spaced-repe
 import { LifeAreasView } from "@/components/life-areas/life-areas-view"
 import { AIAssistantView } from "@/components/ai-assistant/ai-assistant-view"
 import { FloatingAIButton } from "@/components/ai-assistant/floating-ai-button"
+import { WhatsAppStatusCard } from "@/components/whatsapp/whatsapp-status-card"
 
 const navigationItems = [
   {
@@ -189,6 +195,7 @@ export default function Home() {
             <Tabs defaultValue="overview" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="overview">System Overview</TabsTrigger>
+                <TabsTrigger value="whatsapp">WhatsApp Integration</TabsTrigger>
                 <TabsTrigger value="recent">Recent Activity</TabsTrigger>
                 <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               </TabsList>
@@ -247,6 +254,123 @@ export default function Home() {
                       </Button>
                     </CardContent>
                   </Card>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="whatsapp" className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <WhatsAppStatusCard />
+                    
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <MessageSquare className="h-4 w-4" />
+                          Quick Setup Options
+                        </CardTitle>
+                        <CardDescription>
+                          Choose your preferred WhatsApp integration method
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center justify-between p-3 border rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Globe className="h-4 w-4 text-blue-500" />
+                            <div>
+                              <p className="text-sm font-medium">Tampermonkey Userscript</p>
+                              <p className="text-xs text-muted-foreground">5-minute setup</p>
+                            </div>
+                          </div>
+                          <Badge variant="outline">Easy</Badge>
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-3 border rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Smartphone className="h-4 w-4 text-green-500" />
+                            <div>
+                              <p className="text-sm font-medium">whatsapp.web.js Server</p>
+                              <p className="text-xs text-muted-foreground">Professional features</p>
+                            </div>
+                          </div>
+                          <Badge variant="outline">Advanced</Badge>
+                        </div>
+                        
+                        <div className="pt-2">
+                          <WhatsAppConnectButton variant="default" className="w-full" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Bot className="h-4 w-4" />
+                          Available Commands
+                        </CardTitle>
+                        <CardDescription>
+                          Use these commands in any WhatsApp chat
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <div className="grid grid-cols-1 gap-2">
+                          {[
+                            "@ai tolong buatkan saya daily schedule",
+                            "!ai berikan saya 5 idea untuk project",
+                            "/ai tips untuk belajar lebih efektif",
+                            "ai: bantu saya solve masalah productivity",
+                            "assistant: cara untuk improve communication skills",
+                            "help: guide untuk personal development"
+                          ].map((command, index) => (
+                            <div key={index} className="p-2 bg-muted rounded text-xs font-mono">
+                              {command}
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <QrCode className="h-4 w-4" />
+                          Features & Benefits
+                        </CardTitle>
+                        <CardDescription>
+                          What you get with WhatsApp AI Assistant
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <span>Real-time AI assistance in WhatsApp</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <span>Support for Malay and English</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <span>Group chat functionality</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <span>Mobile-friendly access</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <span>Integration with Second Brain system</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <span>Cross-platform compatibility</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </TabsContent>
               
