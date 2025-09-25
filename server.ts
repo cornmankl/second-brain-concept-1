@@ -4,9 +4,10 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import next from 'next';
 import { join } from 'path';
+import { existsSync } from 'fs';
 
 const dev = process.env.NODE_ENV !== 'production';
-const currentPort = 3000;
+const currentPort = 3001;
 const hostname = '0.0.0.0';
 
 // Custom server with Socket.IO integration
@@ -30,14 +31,15 @@ async function createCustomServer() {
         return;
       }
       
-      // Handle static files directly in production
-      if (!dev && req.url?.startsWith('/_next/static')) {
-        const staticPath = join(process.cwd(), '.next', 'static');
+      // Handle static files directly for both dev and production
+      if (req.url?.startsWith('/_next/static')) {
+        const staticPath = dev 
+          ? join(process.cwd(), '.next', 'static')
+          : join(process.cwd(), '.next', 'static');
+        
         const filePath = join(staticPath, req.url.replace('/_next/static', ''));
         
-        // Import fs only when needed
-        const fs = require('fs');
-        if (fs.existsSync(filePath)) {
+        if (existsSync(filePath)) {
           const ext = filePath.split('.').pop();
           const contentType = {
             'js': 'application/javascript',
@@ -54,7 +56,20 @@ async function createCustomServer() {
           
           res.setHeader('Content-Type', contentType);
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          
+          const fs = require('fs');
           fs.createReadStream(filePath).pipe(res);
+          return;
+        }
+      }
+      
+      // Handle favicon
+      if (req.url === '/favicon.ico') {
+        const faviconPath = join(process.cwd(), 'public', 'favicon.ico');
+        if (existsSync(faviconPath)) {
+          res.setHeader('Content-Type', 'image/x-icon');
+          const fs = require('fs');
+          fs.createReadStream(faviconPath).pipe(res);
           return;
         }
       }
