@@ -1,0 +1,56 @@
+
+> nextjs_tailwind_shadcn_ts@0.1.0 dev
+> nodemon --exec "npx tsx server.ts" --watch server.ts --watch src --ext ts,tsx,js,jsx 2>&1 | tee dev.log
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): server.ts src/**/*[39m
+[33m[nodemon] watching extensions: ts,tsx,js,jsx[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3001
+> Socket.IO server running at ws://0.0.0.0:3001/api/socketio
+> Development mode with hot reload enabled
+ ○ Compiling /api/ai-assistant/chat ...
+ ✓ Compiled /api/ai-assistant/chat in 2.4s (368 modules)
+ POST /api/ai-assistant/chat 200 in 4445ms
+ POST /api/ai-assistant/chat 200 in 1311ms
+ POST /api/ai-assistant/chat 200 in 2082ms
+ POST /api/ai-assistant/chat 200 in 3977ms
+ POST /api/ai-assistant/chat 200 in 26896ms
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3001
+> Socket.IO server running at ws://0.0.0.0:3001/api/socketio
+> Development mode with hot reload enabled
+ ○ Compiling /api/ai-assistant/chat ...
+ ✓ Compiled /api/ai-assistant/chat in 2.2s (368 modules)
+ POST /api/ai-assistant/chat 200 in 2993ms
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3001
+> Socket.IO server running at ws://0.0.0.0:3001/api/socketio
+> Development mode with hot reload enabled
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+ ⨯ uncaughtException: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:3001) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+ ⨯ uncaughtException:  Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:3001) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}

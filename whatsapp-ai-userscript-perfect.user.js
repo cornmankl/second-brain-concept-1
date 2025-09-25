@@ -13,7 +13,7 @@
 
     class WhatsAppAIAssistant {
         constructor() {
-            this.aiEndpoint = 'https://second-brain-concept-1.vercel.app/api/ai-assistant/chat';
+            this.aiEndpoint = 'http://localhost:3001/api/ai-assistant/chat';
             this.isInitialized = false;
             this.init();
         }
